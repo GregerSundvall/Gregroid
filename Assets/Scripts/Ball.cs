@@ -6,14 +6,36 @@ using UnityEngine.InputSystem;
 
 public class Ball : MonoBehaviour
 {
-    [SerializeField] private float torque = 50f;
+    [SerializeField] private float torque = 50;
     [SerializeField] private float jumpForce = 10f;
+    private float maxVelocity = 30f;
     private Rigidbody rigidBody;
+    private float moveValue = 0;
     
 
     private void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
+        rigidBody.maxAngularVelocity = 1000;
+    }
+
+    private void FixedUpdate()
+    {
+        Move();
+    }
+
+    void Move()
+    {
+        // rigidBody.rotation = new Quaternion(0,0,rigidBody.rotation.z, rigidBody.rotation.w);
+        
+        // transform.Rotate(0,0,transform.rotation.z);
+        
+        if (rigidBody.angularVelocity.magnitude < maxVelocity && 
+            rigidBody.angularVelocity.magnitude > -maxVelocity)
+        {
+            rigidBody.AddTorque(Vector3.back * torque * moveValue, ForceMode.Impulse);
+        }
+        
     }
 
     void OnJump()
@@ -23,12 +45,9 @@ public class Ball : MonoBehaviour
 
     void OnMove(InputValue value)
     {
-        Debug.Log(value.Get<float>());
-        Debug.Log(transform.rotation);
-        rigidBody.AddTorque(Vector3.back * torque * value.Get<float>(), ForceMode.Impulse);
+        moveValue = value.Get<float>();
+        Debug.Log("input: "+ value.Get<float>());
     }
-    // void GoRight()
-    // {
-    //     rigidBody.AddTorque(transform.forward * torque, ForceMode.Impulse);
-    // }
+
+  
 }
