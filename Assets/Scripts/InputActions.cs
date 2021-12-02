@@ -71,6 +71,15 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Stop"",
+                    ""type"": ""Button"",
+                    ""id"": ""e57ae597-2f3f-4a08-861f-725042dbc852"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -153,17 +162,6 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""1eb73562-f155-4120-8a11-32b069a19c6e"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": ""Hold(duration=1.401298E-45,pressPoint=1.401298E-45)"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""4b9478f1-f6e1-4aa4-b2f1-4d9207382e7b"",
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": ""Hold(duration=0.1,pressPoint=0.1)"",
@@ -175,9 +173,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""49826927-6cf7-4599-a7f8-2c188eaa99cf"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": ""Hold(duration=1.401298E-45,pressPoint=1.401298E-45)"",
+                    ""id"": ""b48840ed-0bb3-4b83-bc72-90b6f4db197e"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": ""Hold(duration=0.1,pressPoint=0.1)"",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Move"",
@@ -186,12 +184,12 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""73750191-c656-49d9-92af-b832c8cc4a1f"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": ""Hold(duration=0.1,pressPoint=0.1)"",
+                    ""id"": ""63310632-eac7-4780-9b13-c9eadb363a5c"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Move"",
+                    ""groups"": """",
+                    ""action"": ""Stop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -268,6 +266,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Abilities = m_Player.FindAction("Abilities", throwIfNotFound: true);
+        m_Player_Stop = m_Player.FindAction("Stop", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -332,6 +331,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Abilities;
+    private readonly InputAction m_Player_Stop;
     public struct PlayerActions
     {
         private @InputActions m_Wrapper;
@@ -341,6 +341,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Abilities => m_Wrapper.m_Player_Abilities;
+        public InputAction @Stop => m_Wrapper.m_Player_Stop;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -365,6 +366,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @Abilities.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbilities;
                 @Abilities.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbilities;
                 @Abilities.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbilities;
+                @Stop.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStop;
+                @Stop.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStop;
+                @Stop.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStop;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -384,6 +388,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @Abilities.started += instance.OnAbilities;
                 @Abilities.performed += instance.OnAbilities;
                 @Abilities.canceled += instance.OnAbilities;
+                @Stop.started += instance.OnStop;
+                @Stop.performed += instance.OnStop;
+                @Stop.canceled += instance.OnStop;
             }
         }
     }
@@ -440,5 +447,6 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnAbilities(InputAction.CallbackContext context);
+        void OnStop(InputAction.CallbackContext context);
     }
 }

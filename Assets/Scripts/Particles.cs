@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ public class Particles : MonoBehaviour
     public GameObject ParticlePrefab;
     private float timer;
 
-    private Queue<GameObject> freeGameObjectsPool;
+    private ConcurrentQueue<GameObject> freeGameObjectsPool;
 
     
     private void Start()
@@ -38,7 +39,7 @@ public class Particles : MonoBehaviour
     
     private void ObjectPoolWarmUp()
     {
-        freeGameObjectsPool = new Queue<GameObject>();
+        freeGameObjectsPool = new ConcurrentQueue<GameObject>();
         
         for (var i = 0; i < 10000; ++i)
         {

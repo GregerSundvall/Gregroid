@@ -49,6 +49,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Stop",
+                    "type": "Button",
+                    "id": "e57ae597-2f3f-4a08-861f-725042dbc852",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -131,17 +140,6 @@
                 },
                 {
                     "name": "",
-                    "id": "1eb73562-f155-4120-8a11-32b069a19c6e",
-                    "path": "<Keyboard>/w",
-                    "interactions": "Hold(duration=1.401298E-45,pressPoint=1.401298E-45)",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "4b9478f1-f6e1-4aa4-b2f1-4d9207382e7b",
                     "path": "<Keyboard>/a",
                     "interactions": "Hold(duration=0.1,pressPoint=0.1)",
@@ -153,9 +151,9 @@
                 },
                 {
                     "name": "",
-                    "id": "49826927-6cf7-4599-a7f8-2c188eaa99cf",
-                    "path": "<Keyboard>/s",
-                    "interactions": "Hold(duration=1.401298E-45,pressPoint=1.401298E-45)",
+                    "id": "b48840ed-0bb3-4b83-bc72-90b6f4db197e",
+                    "path": "<Keyboard>/d",
+                    "interactions": "Hold(duration=0.1,pressPoint=0.1)",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Move",
@@ -164,12 +162,12 @@
                 },
                 {
                     "name": "",
-                    "id": "73750191-c656-49d9-92af-b832c8cc4a1f",
-                    "path": "<Keyboard>/d",
-                    "interactions": "Hold(duration=0.1,pressPoint=0.1)",
+                    "id": "63310632-eac7-4780-9b13-c9eadb363a5c",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Move",
+                    "groups": "",
+                    "action": "Stop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
