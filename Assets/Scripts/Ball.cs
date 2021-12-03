@@ -17,13 +17,12 @@ public class Ball : MonoBehaviour
     
     // Also movement kinda
     private bool isGrounded = false;
-    private bool isTouchingWall = false;
     private int jumpsSinceGrounded = 0;
     
     // Abilities
     private bool hasDash = true;
     //private bool hasDoubleDash = false;
-    private bool hasDoubleJump = false;
+    private bool hasDoubleJump = true;
     private bool hasWallJump = false;
     private bool hasInfiniteJump = false;
     private bool canBuild = false;
@@ -42,7 +41,10 @@ public class Ball : MonoBehaviour
 
     private void Update()
     {
-        IsGrounded();
+        if (isStopping)
+        {
+            Stop();
+        }
     }
 
     private void FixedUpdate()
@@ -50,24 +52,31 @@ public class Ball : MonoBehaviour
         Roll();
     }
 
-    void IsGrounded()
+    private void OnCollisionEnter(Collision other)
     {
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.8f);
-        if (isGrounded)
+        if (other.gameObject.CompareTag("Ground"))
         {
             jumpsSinceGrounded = 0;
+            isGrounded = true;
         }
     }
 
-    void IsTouchingWall()
+    private void OnCollisionExit(Collision other)
     {
-        if (Physics.Raycast(transform.position, Vector3.left, 0.8f) ||
-            Physics.Raycast(transform.position, Vector3.right, 0.8f))
+        if (other.gameObject.CompareTag("Ground"))
         {
-            isTouchingWall = true;
-            return;
+            isGrounded = false;
         }
-        isTouchingWall = false;
+    }
+
+    bool IsTouchingWall()
+    {
+        if (Physics.Raycast(transform.position, Vector3.left, 0.6f) ||
+            Physics.Raycast(transform.position, Vector3.right, 0.6f))
+        {
+            return true;
+        }
+        return false;
     }
 
     void OnDash()
@@ -91,26 +100,21 @@ public class Ball : MonoBehaviour
 
     void OnJump()
     {
+        if (isGrounded ||
+            hasDoubleJump && jumpsSinceGrounded == 1 ||
+            IsTouchingWall() && hasWallJump ||
+            hasInfiniteJump)
+        {
+            Jump();
+        } 
+    }
+
+    void Jump()
+    {
         var currentJumpForce = jumpForce * jumpForceMultiplier;
         var forceMode = ForceMode.Impulse;
-        
-        if (isGrounded)
-        {
-            rigidBody.AddForce(Vector3.up * currentJumpForce, forceMode);
-            jumpsSinceGrounded++;
-        } else if (isTouchingWall && hasWallJump)
-        {
-            rigidBody.AddForce(Vector3.up * currentJumpForce, forceMode);
-            //jumpsSinceGrounded++;
-        } else if (hasDoubleJump && jumpsSinceGrounded == 1)
-        {
-            rigidBody.AddForce(Vector3.up * currentJumpForce, forceMode);
-            jumpsSinceGrounded = 2;
-        } else if (hasInfiniteJump)
-        {
-            rigidBody.AddForce(Vector3.up * currentJumpForce, forceMode);
-        }
-        
+        rigidBody.AddForce(Vector3.up * currentJumpForce, forceMode);
+        jumpsSinceGrounded++;
     }
 
     void OnMove(InputValue value)
@@ -122,6 +126,10 @@ public class Ball : MonoBehaviour
     void OnStop()
     {
         isStopping = true;
+    }
+
+    void Stop()
+    {
         moveValue = 0;
         rigidBody.angularVelocity = Vector3.zero;
     }
